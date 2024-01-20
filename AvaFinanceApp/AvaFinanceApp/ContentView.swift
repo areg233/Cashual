@@ -16,7 +16,7 @@ struct ContentView: View {
                         .scaledToFit()
                         .frame(width: 144, height: 144)
                     
-                    Text("Ava's Finance App")
+                    Text("Cashual")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
