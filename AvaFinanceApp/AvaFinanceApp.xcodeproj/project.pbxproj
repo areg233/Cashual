@@ -12,6 +12,8 @@
 		95F0B8642B3D186C00405F96 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F0B8632B3D186C00405F96 /* Item.swift */; };
 		95F0B8662B3D186D00405F96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95F0B8652B3D186D00405F96 /* Assets.xcassets */; };
 		95F0B8692B3D186D00405F96 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95F0B8682B3D186D00405F96 /* Preview Assets.xcassets */; };
+		EF8AF4A72B7740D90013A723 /* SurveyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8AF4A62B7740D90013A723 /* SurveyModels.swift */; };
+		EF8AF4A92B7743AA0013A723 /* SurveyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8AF4A82B7743AA0013A723 /* SurveyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +25,8 @@
 		95F0B8682B3D186D00405F96 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		95F0B86A2B3D186D00405F96 /* AvaFinanceApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AvaFinanceApp.entitlements; sourceTree = "<group>"; };
 		95F0B86B2B3D186D00405F96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF8AF4A62B7740D90013A723 /* SurveyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyModels.swift; sourceTree = "<group>"; };
+		EF8AF4A82B7743AA0013A723 /* SurveyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,8 @@
 				95F0B86A2B3D186D00405F96 /* AvaFinanceApp.entitlements */,
 				95F0B86B2B3D186D00405F96 /* Info.plist */,
 				95F0B8672B3D186D00405F96 /* Preview Content */,
+				EF8AF4A62B7740D90013A723 /* SurveyModels.swift */,
+				EF8AF4A82B7743AA0013A723 /* SurveyView.swift */,
 			);
 			path = AvaFinanceApp;
 			sourceTree = "<group>";
@@ -147,6 +153,8 @@
 				95F0B8622B3D186C00405F96 /* ContentView.swift in Sources */,
 				95F0B8642B3D186C00405F96 /* Item.swift in Sources */,
 				95F0B8602B3D186C00405F96 /* AvaFinanceAppApp.swift in Sources */,
+				EF8AF4A92B7743AA0013A723 /* SurveyView.swift in Sources */,
+				EF8AF4A72B7740D90013A723 /* SurveyModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

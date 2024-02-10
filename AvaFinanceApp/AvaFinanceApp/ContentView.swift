@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     let darkBlueColor = Color(red: 10/255, green: 25/255, blue: 47/255) // Adjust these RGB values to match your icon's background
+    @State private var showingSurvey = false // This line should be inside your ContentView struct
 
     var body: some View {
         NavigationView {
@@ -37,6 +38,15 @@ struct ContentView: View {
                     }
                     .listStyle(PlainListStyle())
                     .background(darkBlueColor)
+                    
+                    
+                    // Button to present the survey
+                    Button("Start Financial Health Survey") {
+                        showingSurvey = true
+                    }
+                    .sheet(isPresented: $showingSurvey) {
+                        SurveyView() // Present the SurveyView
+                    }
                     
                     Spacer()
                 }
