@@ -1,56 +1,116 @@
-//
-//  SurveyView.swift
-//  AvaFinanceApp
-//
-//  Created by Ava Reger on 2/10/24.
-//
-
-import Foundation
 import SwiftUI
 
 struct SurveyView: View {
-    @State private var currentQuestionIndex = 0 // Tracks the current question
-    @State private var selectedAnswers = [Int]() // Holds the selected score for each question
+    let survey: FinancialHealthSurvey
+    @Environment(\.presentationMode) var presentationMode // For navigating back
+    @State private var currentQuestionIndex = 0
+    @State private var selectedAnswers = [Int]()
+    @State private var totalScore = 0 // Accumulate scores
+    @State private var surveyCompleted = false // Track completion
 
     var body: some View {
-        VStack {
-            if currentQuestionIndex < sampleSurvey.questions.count {
-                let question = sampleSurvey.questions[currentQuestionIndex]
-                Text(question.text)
-                    .font(.title)
-                    .padding()
-                
-                ForEach(question.answers, id: \.text) { answer in
+        ZStack {
+            Color(red: 10/255, green: 25/255, blue: 47/255)
+                .edgesIgnoringSafeArea(.all) // Navy background
+
+            VStack {
+                // Back button
+                HStack {
                     Button(action: {
-                        self.selectedAnswers.append(answer.score) // Save the selected answer's score
-                        if self.currentQuestionIndex < sampleSurvey.questions.count - 1 {
-                            self.currentQuestionIndex += 1 // Go to next question
-                        }
+                        self.presentationMode.wrappedValue.dismiss() // Go back
                     }) {
-                        Text(answer.text)
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .foregroundColor(.white)
+                            Text("Back")
+                                .foregroundColor(.white)
+                        }
+                        .padding()
+                    }
+                    Spacer()
+                }
+
+                // Survey title
+                Text(survey.title)
+                    .foregroundColor(.white)
+                    .font(.largeTitle)
+                    .padding()
+
+                // Questions and answers
+                if !surveyCompleted {
+                    if currentQuestionIndex < survey.questions.count {
+                        let question = survey.questions[currentQuestionIndex]
+
+                        Text(question.text)
+                            .foregroundColor(.white)
+                            .font(.title)
+                            .padding()
+
+                        ForEach(question.answers.indices, id: \.self) { index in
+                            let answer = question.answers[index]
+                            Button(action: {
+                                self.selectedAnswers.append(answer.score)
+                                self.totalScore += answer.score
+                                
+                                if self.currentQuestionIndex < self.survey.questions.count - 1 {
+                                    self.currentQuestionIndex += 1
+                                } else {
+                                    self.surveyCompleted = true // Survey completed
+                                }
+                            }) {
+                                Text(answer.text)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(10)
+                            }
+                            .padding(.bottom, 2)
+                        }
+                    }
+                } else {
+                    // Display score and completion advice
+                    VStack {
+                        Text("Your Score: \(totalScore)")
+                            .font(.headline)
                             .foregroundColor(.white)
                             .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                            .padding(.horizontal)
+                        Text(completionAdvice(for: totalScore))
+                            .foregroundColor(.white)
+                            .font(.headline)
+                            .padding()
                     }
                 }
-            } else {
-                // Survey is completed
-                let totalScore = selectedAnswers.reduce(0, +) // Calculate the total score
-                Text("Your financial health score is \(totalScore)")
-                    .font(.title)
-                // Here you can add more code to give specific advice based on the totalScore
+                Spacer()
             }
-            Spacer()
         }
-        .navigationBarBackButtonHidden(currentQuestionIndex < sampleSurvey.questions.count) // Hide back button while survey is in progress
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    // Function to determine completion advice based on score
+    func completionAdvice(for score: Int) -> String {
+        // Define ranges directly as tuples and associate them with advice
+        let adviceRanges: [(range: Range<Int>, advice: String)] = [
+            (40..<Int.max, "Excellent! You have a strong handle on your debt management. Keep leveraging your knowledge and strategies to stay ahead."),
+            (20..<40, "You're on the right track, but there's room for improvement. Focus on understanding interest rates better and consider ways to optimize your debt repayment plan."),
+            (0..<20, "It's important to start taking control of your debt. Begin with understanding the impact of interest rates and exploring debt management services that could offer assistance.")
+        ]
+        
+        // Iterate through the ranges to find where the score fits
+        for adviceRange in adviceRanges {
+            if adviceRange.range.contains(score) {
+                // Return the associated advice
+                return adviceRange.advice
+            }
+        }
+        
+        // Default advice if none of the ranges match
+        return "Thank you for completing the survey."
     }
 }
 
+// Preview provider
 struct SurveyView_Previews: PreviewProvider {
     static var previews: some View {
-        SurveyView()
+        SurveyView(survey: budgetingBasicsSurvey)
     }
 }
