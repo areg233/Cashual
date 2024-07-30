@@ -1,6 +1,6 @@
 //
 //  AvaFinanceAppApp.swift
-//  AvaFinanceApp
+//  Cashual
 //
 //  Created by Ava Reger on 12/27/23.
 //

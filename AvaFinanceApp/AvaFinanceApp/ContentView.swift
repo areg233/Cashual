@@ -1,58 +1,162 @@
+//
+//  ContentView.swift
+//  Cashual
+//
+//  Created by Ava Reger on 12/27/23.
+//
+
 import SwiftUI
 
 struct ContentView: View {
-    let darkBlueColor = Color(red: 10/255, green: 25/255, blue: 47/255) // Adjust these RGB values to match your icon's background
-    @State private var showingSurvey = false // This line should be inside your ContentView struct
+    @State private var selectedSurvey: FinancialHealthSurvey?
+    @State private var showSurvey = false
+    @State private var showingCalculator: Bool = false
+    @State private var calculatorToPresent: AnyView? = nil
+    @State private var calculatorView: AnyView?
+    @State private var showCarPaymentCalculator = false
+    @State private var showHousePaymentCalculator = false
+    @State private var showSavingsCalculator = false
+    
+    let darkBlueColor = Color(red: 10/255, green: 25/255, blue: 47/255)
+    let gridItems = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
 
     var body: some View {
         NavigationView {
             ZStack {
                 darkBlueColor.edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    Spacer()
-                    
-                    Image("app_icon_transparent")
+
+                VStack(spacing: 0) {
+                    Image("MainScreenBackground")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 144, height: 144)
-                    
-                    Text("Cashual")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    
-                    List {
-                        NavigationLink(destination: TaxesView()) {
-                            Text("Taxes: W2 Employee vs 1099 Contractor")
-                                .foregroundColor(.black) // Set text color to black
+                        .scaledToFill()
+                        .frame(height: UIScreen.main.bounds.height / 3)
+                        .clipped()
+
+                    ScrollView(showsIndicators: false) {
+                        VStack {
+                            sectionHeader(title: "Financial Calculators").padding(.top, 20)
+                            iconGridCalculators()
+
+                            sectionHeader(title: "Check Your Financial Health").padding(.top, 20)
+                            iconGridSurveys()
                         }
-                        NavigationLink(destination: SavingsView()) {
-                            Text("Savings: How to Prepare for a Rainy Day")
-                                .foregroundColor(.black) // Set text color to black
-                        }
-                        NavigationLink(destination: StudentLoanView()) {
-                            Text("Student Loan Payback: Getting Back to a Clean Slate")
-                                .foregroundColor(.black) // Set text color to black
-                        }
-                    }
-                    .listStyle(PlainListStyle())
-                    .background(darkBlueColor)
-                    
-                    
-                    // Button to present the survey
-                    Button("Start Financial Health Survey") {
-                        showingSurvey = true
-                    }
-                    .sheet(isPresented: $showingSurvey) {
-                        SurveyView() // Present the SurveyView
+                        .padding(.horizontal)
                     }
                     
-                    Spacer()
+                    VStack {
+                        List {
+                            NavigationLink(destination: TaxesView()) {
+                                Text("Taxes: W2 Employee vs 1099 Contractor")
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color(red: 255/255, green: 111/255, blue: 97/255)) // Coral color
+                                    .cornerRadius(8)
+                            }
+                            .listRowBackground(Color.clear) // Clear background for the list row
+                            
+                            NavigationLink(destination: SavingsView()) {
+                                Text("Savings: How to Prepare for a Rainy Day")
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color(red: 79/255, green: 193/255, blue: 233/255)) // Lighter blue
+                                    .cornerRadius(8)
+                            }
+                            .listRowBackground(Color.clear) // Clear background for the list row
+                            
+                            NavigationLink(destination: StudentLoanView()) {
+                                Text("Student Loan: Getting Back to a Clean Slate")
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color(red: 72/255, green: 201/255, blue: 176/255)) // Teal color
+                                    .cornerRadius(8)
+                            }
+                            .listRowBackground(Color.clear) // Clear background for the list row
+                        }
+                        .listStyle(PlainListStyle())
+                        .frame(maxHeight: 200)
+                        .background(darkBlueColor)
+                    }
                 }
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showSurvey) {
+            SurveyView(survey: selectedSurvey ?? budgetingBasicsSurvey)
+        }
+        .sheet(isPresented: $showCarPaymentCalculator) {
+            CarPaymentCalculatorView()
+        }
+        .sheet(isPresented: $showHousePaymentCalculator) {
+            HousePaymentCalculatorView()
+        }
+        .sheet(isPresented: $showSavingsCalculator) {
+            SavingsCalculatorView()
+        }
+    }
+
+    private func sectionHeader(title: String) -> some View {
+        Text(title)
+            .font(.headline)
+            .foregroundColor(.white)
+            .padding(.vertical, 5)
+    }
+    
+    private func iconGridCalculators() -> some View {
+            LazyVGrid(columns: gridItems, spacing: 20) {
+                Button(action: {
+                    self.showCarPaymentCalculator = true
+                }) {
+                    iconView(icon: "car", text: "Car Payment")
+                }
+                Button(action: {
+                    self.showHousePaymentCalculator = true
+                }) {
+                    iconView(icon: "house", text: "House Payment")
+                }
+                Button(action: {
+                    self.showSavingsCalculator = true
+                }) {
+                    iconView(icon: "banknote", text: "Savings")
+                }
+            }
+        }
+    
+    private func iconGridSurveys() -> some View {
+        LazyVGrid(columns: gridItems, spacing: 20) {
+            Button(action: {
+                self.selectedSurvey = budgetingBasicsSurvey
+                self.showSurvey = true
+            }) {
+                iconView(icon: "heart.text.square", text: "Budgeting Basics Survey")
+            }
+            Button(action: {
+                self.selectedSurvey = debtManagementSurvey
+                self.showSurvey = true
+            }) {
+                iconView(icon: "dollarsign.circle", text: "Debt Management Survey")
+            }
+            Button(action: {
+                self.selectedSurvey = savingsAndInvestmentSurvey
+                self.showSurvey = true
+            }) {
+                iconView(icon: "chart.bar", text: "Savings and Investment Survey")
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func iconView(icon: String, text: String) -> some View {
+        VStack {
+            Image(systemName: icon)
+                .font(.largeTitle)
+                .foregroundColor(.white)
+            Text(text)
+                .foregroundColor(.white)
+                .font(.caption)
         }
     }
 }

@@ -1,8 +1,8 @@
 //
 //  Item.swift
-//  AvaFinanceApp
+//  Cashual
 //
-//  Created by Joe Reger on 12/27/23.
+//  Created by Ava Reger on 12/27/23.
 //
 
 import Foundation
